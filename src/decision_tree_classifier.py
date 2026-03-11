@@ -11,11 +11,11 @@ class DecisionTreeClassifier(BinaryTree):
     def terminate(self):
         ...
 
-    def _construct_subtree(self,v,x,y):
+    def _construct_subtree(self,v,x:NDArray,y:NDArray):
 
         if self.terminate():
-            self.fit(x,y)
-            return
+            return np.argmax(np.bincount(y) / len(y))
+
         
         s_v = self._split(v)
         vt,vf = ...
@@ -23,11 +23,13 @@ class DecisionTreeClassifier(BinaryTree):
     def _sucessors(self):
         ...
 
-    def fit(self,x,y):
+    def fit(self,y:NDArray):
         ...
     def predict(self):
         ...
     def _split(self,v):
+        ''
+        pz = np.bincount(len(y))
         ...
 
 
