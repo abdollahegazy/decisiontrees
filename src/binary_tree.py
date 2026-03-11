@@ -1,6 +1,6 @@
 from collections import deque
 from typing import List
-from node import Node
+from .node import Node
 
 class BinaryTree:
     def __init__(self) -> None:

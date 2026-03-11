@@ -19,8 +19,7 @@ class Node:
         self.left = left
         self.right = right
         # regional predictor function
-        self.g = None
-
+        self.g: int | None = None
         # def loss(self):
         #     if(len(self.y)==0):
         #         return 0
