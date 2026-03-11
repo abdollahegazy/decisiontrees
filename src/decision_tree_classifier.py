@@ -6,7 +6,8 @@ from .node import Node
 from typing import Tuple
 
 class DecisionTreeClassifier(BinaryTree):
-    def __init__(self,max_depth:int,splitting_rule:str) -> None:
+    def __init__(self,max_depth:int,
+                 splitting_rule:str='gini') -> None:
         super().__init__()
         self.max_depth = max_depth
         self.splitting_rule = splitting_rule
@@ -16,7 +17,12 @@ class DecisionTreeClassifier(BinaryTree):
 
     def _loss_fn(self,y:NDArray):
         pz = np.bincount(y) / len(y)
-        return -1*sum(pz[pz>0]*np.log2(pz[pz>0]))
+        if self.splitting_rule == 'misclassification_impurity':
+            return 1 - np.max(pz)
+        elif self.splitting_rule == 'gini':
+            return 1 - np.sum(pz**2)
+        elif self.splitting_rule == 'entropy':
+            return -1*sum(pz[pz>0]*np.log2(pz[pz>0]))
 
     def _construct_subtree(self,node:Node,max_depth:int):
         if node.depth == max_depth or len(np.unique(node.y)) == 1:
@@ -40,7 +46,7 @@ class DecisionTreeClassifier(BinaryTree):
         self._construct_subtree(node=self.root,max_depth=self.max_depth)
     
     def _data_split(self,x,y,feature,threshold):
-        mask = x[:,feature]<=threshold
+        mask = x[:,feature] <= threshold
         x_true, x_false = x[mask,:],x[~mask,:]
         y_true, y_false = y[mask],y[~mask]
         return x_true,y_true,x_false,y_false
@@ -68,6 +74,7 @@ class DecisionTreeClassifier(BinaryTree):
                 
         return best_feature,best_threshold
     def predict(self,x) -> NDArray:
+
         # want to work for matrix of data points, so we can vectorize the prediction
         def _predict(x):
             def _predict(x,node:Node):

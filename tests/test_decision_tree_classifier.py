@@ -12,13 +12,15 @@ def makedata():
 
 from sklearn.tree import DecisionTreeClassifier as SklearnDTC
 X_train, X_test, y_train, y_test = makedata()
-# regTree = DecisionTreeRegressor(max_depth = 10, random_state=0)
-# regTree.fit(X_train,y_train)
-# y_hat = regTree.predict(X_test)
-# MSE2 = np.mean(np.power(y_hat - y_test,2))
-# print ("DecisionTreeRegressor: tree loss =", MSE2)
-myTree = DTC(max_depth = 10, splitting_rule='entropy')
+
+myTree = DTC(max_depth = 10, splitting_rule='gini')
 myTree.fit(X_train,y_train)
 y_hat = myTree.predict(X_test)
 accuracy = np.mean(y_hat == y_test)
-print ("DecisionTreeClassifier: tree accuracy =", accuracy)
+print ("DecisionTreeClassifier: tree accuracy =", accuracy*100)
+
+sklearn_tree = SklearnDTC(max_depth=10, criterion='gini', random_state=42)
+sklearn_tree.fit(X_train, y_train)
+y_hat_sklearn = sklearn_tree.predict(X_test)
+accuracy_sklearn = np.mean(y_hat_sklearn == y_test)
+print("Sklearn DecisionTreeClassifier: tree accuracy =", accuracy_sklearn*100)
