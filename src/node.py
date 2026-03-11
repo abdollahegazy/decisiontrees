@@ -1,4 +1,5 @@
 from typing import Optional,Any
+import numpy as np
 
 class Node:
     def __init__(self,
@@ -14,6 +15,13 @@ class Node:
         self.y =y
         # split parameters
         self.j, self.xi = None,None
-        # choldren
+        # children
         self.left = left
         self.right = right
+        # regional predictor function
+        self.g = None
+
+        # def loss(self):
+        #     if(len(self.y)==0):
+        #         return 0
+        #     return np.sum(np.power(self.y - self.y.mean(),2))
